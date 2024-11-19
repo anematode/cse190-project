@@ -1155,67 +1155,51 @@ inline void println(const std::string^ s) noexcept safe {
   unsafe { printf("%s\n", s->c_str()); }
 }
 
-inline void println(signed char x) noexcept safe
+#define __X_TYPES_AND_FORMAT          \
+    X(signed char,            "%hhd") \
+    X(short,                  "%hd")  \
+    X(int,                    "%d")   \
+    X(long int,               "%ld")  \
+    X(long long int,          "%lld") \
+    X(unsigned char,          "%hhu") \
+    X(unsigned short,         "%hu")  \
+    X(unsigned int,           "%u")   \
+    X(long unsigned int,      "%lu")  \
+    X(long long unsigned int, "%llu") \
+    X(float,                  "%f")   \
+    X(double,                 "%f")   \
+    X(long double,            "%Lf")  \
+
+#define X(TYPE, PRI) \
+    inline void println(TYPE x) noexcept safe \
+    { unsafe { printf(PRI "\n", x); } }
+
+__X_TYPES_AND_FORMAT
+
+inline void print(string_view sv) noexcept safe
 {
-  unsafe { printf("%hhd\n", x); }
+  unsafe { printf("%.*s", sv.size(), sv.data()); }
 }
 
-inline void println(short x) noexcept safe
+inline void print(string_constant<char> sc) noexcept safe
 {
-  unsafe { printf("%hd\n", x); }
+  print(sc.text());
 }
 
-inline void println(int x) noexcept safe
-{
-  unsafe { printf("%d\n", x); }
+inline void print(const std::string^ s) noexcept safe {
+  unsafe { printf("%s", s->c_str()); }
 }
 
-inline void println(long int x) noexcept safe
-{
-  unsafe { printf("%ld\n", x); }
-}
+#undef X
 
-inline void println(long long int x) noexcept safe
-{
-  unsafe { printf("%lld\n", x); }
-}
+#define X(TYPE, PRI) \
+    inline void print(TYPE x) noexcept safe \
+    { unsafe { printf(PRI, x); } }
 
-inline void println(unsigned char x) noexcept safe
-{
-  unsafe { printf("%hhu\n", x); }
-}
+__X_TYPES_AND_FORMAT
 
-inline void println(unsigned short x) noexcept safe
-{
-  unsafe { printf("%hu\n", x); }
-}
+#undef X
 
-inline void println(unsigned int x) noexcept safe
-{
-  unsafe { printf("%u\n", x); }
-}
-
-inline void println(long unsigned int x) noexcept safe
-{
-  unsafe { printf("%lu\n", x); }
-}
-
-inline void println(long long unsigned int x) noexcept safe
-{
-  unsafe { printf("%llu\n", x); }
-}
-
-inline void println(float x) noexcept safe {
-  unsafe { printf("%f\n", x); }
-}
-
-inline void println(double x) noexcept safe {
-  unsafe { printf("%f\n", x); }
-}
-
-inline void println(long double x) noexcept safe {
-  unsafe { printf("%Lf\n", x); }
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // mutex.h
