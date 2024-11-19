@@ -1828,5 +1828,11 @@ impl vector<T>: make_iter {
   }
 };
 
+void assert(bool condition, const char* name) safe {
+  unsafe {
+    if (!condition) throw std::runtime_error(std::string("Assertion failed: ") + name);
+  }
+}
+
 } // namespace std
 

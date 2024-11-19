@@ -1,4 +1,3 @@
-
 #include <iostream>
 
 void change_a(int& a) {
