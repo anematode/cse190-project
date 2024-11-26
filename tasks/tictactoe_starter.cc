@@ -1,7 +1,8 @@
-#include <vector>
+#feature on safety
+#include "../vendor/std2.h"
 #include "../vendor/io.h"
 
-using namespace std;
+using namespace std2;
 
 // Function to print the board
 void printBoard(const vector<vector<char>>& board) {

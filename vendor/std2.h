@@ -1141,65 +1141,7 @@ auto operator""s2(wchar_t const* p, std::size_t len) noexcept safe -> wstring
 ////////////////////////////////////////////////////////////////////////////////
 // io.h
 
-inline void println(string_view sv) noexcept safe
-{
-  unsafe { printf("%.*s\n", sv.size(), sv.data()); }
-}
-
-inline void println(string_constant<char> sc) noexcept safe
-{
-  println(sc.text());
-}
-
-inline void println(const std::string^ s) noexcept safe {
-  unsafe { printf("%s\n", s->c_str()); }
-}
-
-#define __X_TYPES_AND_FORMAT          \
-    X(signed char,            "%hhd") \
-    X(short,                  "%hd")  \
-    X(int,                    "%d")   \
-    X(long int,               "%ld")  \
-    X(long long int,          "%lld") \
-    X(unsigned char,          "%hhu") \
-    X(unsigned short,         "%hu")  \
-    X(unsigned int,           "%u")   \
-    X(long unsigned int,      "%lu")  \
-    X(long long unsigned int, "%llu") \
-    X(float,                  "%f")   \
-    X(double,                 "%f")   \
-    X(long double,            "%Lf")  \
-
-#define X(TYPE, PRI) \
-    inline void println(TYPE x) noexcept safe \
-    { unsafe { printf(PRI "\n", x); } }
-
-__X_TYPES_AND_FORMAT
-
-inline void print(string_view sv) noexcept safe
-{
-  unsafe { printf("%.*s", sv.size(), sv.data()); }
-}
-
-inline void print(string_constant<char> sc) noexcept safe
-{
-  print(sc.text());
-}
-
-inline void print(const std::string^ s) noexcept safe {
-  unsafe { printf("%s", s->c_str()); }
-}
-
-#undef X
-
-#define X(TYPE, PRI) \
-    inline void print(TYPE x) noexcept safe \
-    { unsafe { printf(PRI, x); } }
-
-__X_TYPES_AND_FORMAT
-
-#undef X
-
+#define _SAFE
 
 ////////////////////////////////////////////////////////////////////////////////
 // mutex.h

@@ -1,16 +1,8 @@
-#include <iostream>
-template <typename T>
-void input(T* t) {
-    std::cin >> *t;
-}
-
 #feature on safety
 #include "../vendor/std2.h"
-using namespace std2;
+#include "../vendor/io.h"
 
-void _pchar(char c) safe {
-    unsafe { putchar(c); }
-}
+using namespace std2;
 
 // Function to print the board
 void printBoard(const vector<vector<char>>^ board) safe {
@@ -20,11 +12,10 @@ void printBoard(const vector<vector<char>>^ board) safe {
         print("| ");
     for (unsigned int j = 0; j < 3; ++j) {
         char cell = row[j];
-            _pchar(cell);
+            print(cell);
             print(" | ");
         }
-        println("");
-        println("-------------");
+        println("\n-------------");
     }
 }
 
@@ -33,21 +24,23 @@ void playerMove(vector<vector<char>>^ board, char player) safe {
     unsigned int row = 1, col = 1;
     while (true) {
         print("Player ");
-        _pchar(player);
+        print(player);
         print(", enter your move (row and column): ");
+
         unsafe {
             input(&row);
             input(&col);
         }
+
         if (row >= 1 && row <= 3 && col >= 1 && col <= 3 && board[row - 1][col - 1] == ' ') {
         //  board[row - 1][col - 1] = player;
             vector<char>^ column = ^board[row - 1];
             char^         cell   = ^column[col - 1];
                          *cell   = player;
             break;
-        } else {
-            println("Invalid move. Try again.");
         }
+
+        println("Invalid move. Try again.");
     }
 }
 
@@ -76,11 +69,11 @@ bool checkDraw(const vector<vector<char>>^ board) safe {
 // Main function
 int main() safe {
     // Initialize a 3x3 board with empty spaces
-    vector<vector<char>> board {{
-        vector<char>{{' ', ' ', ' '}},
-        vector<char>{{' ', ' ', ' '}},
-        vector<char>{{' ', ' ', ' '}}
-    }};
+    vector<vector<char>> board {
+        {' ', ' ', ' '},
+        {' ', ' ', ' '},
+        {' ', ' ', ' '}
+    };
     char currentPlayer = 'X';
     bool gameWon = false;
 
