@@ -3,8 +3,6 @@
 #include <string>
 #include <vector>
 
-#feature on safety
-
 using namespace std;
 
 // Define constants for board size
@@ -22,17 +20,12 @@ struct Board {
 
     // Helper function to get the piece at a specific position
     string get(int x, int y) const {
-        return cpy squares[(unsigned int)y * BOARD_SIZE + (unsigned int)x];
+        return squares[(unsigned int)y * BOARD_SIZE + (unsigned int)x];
     }
 
     // Helper function to set a piece at a specific position
     void set(int x, int y, string piece) {
-        println(x);
-        println(y);
-        println(piece);
-        squares[(unsigned int)y * BOARD_SIZE + (unsigned int)x] = rel piece;
-        println(x);
-        println(y);
+        squares[(unsigned int)y * BOARD_SIZE + (unsigned int)x] = piece;
     }
 
     // Function to print the board
@@ -51,28 +44,24 @@ struct Board {
     }
 };
 
+#feature on safety
+
 // Function to initialize the chess board
-void initializeBoard(Board^ board) safe {
-    Board& b = &(*board);
-    
+void initializeBoard(Board& b) safe {
     // Place pawns
-#if 1
     for (int i = 0; i < (int)BOARD_SIZE; ++i) {
         b.set(i, 1, "P");  // White pawns
         b.set(i, 6, "p");  // Black pawns
     }
-#endif
 
     // Place other pieces
     vector<string> whitePieces = {"R", "N", "B", "Q", "K", "B", "N", "R"};
     vector<string> blackPieces = {"r", "n", "b", "q", "k", "b", "n", "r"};
 
-#if 0
     for (int i = 0; i < (int)BOARD_SIZE; ++i) {
-        b.set(i, 0, whitePieces[(unsigned int)i]);
-        b.set(i, 7, blackPieces[(unsigned int)i]);
+        b.set(i, 0, cpy whitePieces[(unsigned int)i]);
+        b.set(i, 7, cpy blackPieces[(unsigned int)i]);
     }
-#endif
 }
 
 // Abstract class for ValidMoveChecker
@@ -236,7 +225,7 @@ void playerMove(Board& board, string player) {
 
 int main() {
     Board board {};
-    initializeBoard(^board);
+    initializeBoard(&board);
     board.show();
 
     while (true) {

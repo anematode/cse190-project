@@ -1,8 +1,7 @@
 #include "../vendor/io.h"
 #include <array>
 #include <string>
-
-#feature on safety
+#include <vector>
 
 using namespace std;
 
@@ -21,11 +20,11 @@ struct Board {
 
     // Helper function to get the piece at a specific position
     string get(int x, int y) const {
-        return cpy squares[(unsigned int)y * BOARD_SIZE + (unsigned int)x];
+        return squares[(unsigned int)y * BOARD_SIZE + (unsigned int)x];
     }
 
     // Helper function to set a piece at a specific position
-    void set(int x, int y, string const& piece) {
+    void set(int x, int y, string piece) {
         squares[(unsigned int)y * BOARD_SIZE + (unsigned int)x] = piece;
     }
 
@@ -45,21 +44,23 @@ struct Board {
     }
 };
 
+#feature on safety
+
 // Function to initialize the chess board
-void initializeBoard(Board& board) {
+void initializeBoard(Board& b) safe {
     // Place pawns
     for (int i = 0; i < (int)BOARD_SIZE; ++i) {
-        board.set(i, 1, "P");  // White pawns
-        board.set(i, 6, "p");  // Black pawns
+        b.set(i, 1, "P");  // White pawns
+        b.set(i, 6, "p");  // Black pawns
     }
 
     // Place other pieces
-    string whitePieces[] = {"R", "N", "B", "Q", "K", "B", "N", "R"};
-    string blackPieces[] = {"r", "n", "b", "q", "k", "b", "n", "r"};
+    vector<string> whitePieces = {"R", "N", "B", "Q", "K", "B", "N", "R"};
+    vector<string> blackPieces = {"r", "n", "b", "q", "k", "b", "n", "r"};
 
     for (int i = 0; i < (int)BOARD_SIZE; ++i) {
-        board.set(i, 0, whitePieces[(unsigned int)i]);
-        board.set(i, 7, blackPieces[(unsigned int)i]);
+        b.set(i, 0, whitePieces[(unsigned int)i]);
+        b.set(i, 7, blackPieces[(unsigned int)i]);
     }
 }
 
@@ -102,12 +103,12 @@ class RookChecker : public ValidMoveChecker {
 public:
     bool isValidMove(int startX, int startY, int endX, int endY, const Board& board, const string& player) const override {
         if (startX == endX) {  // Vertical move
-            for (int i = *min(startY, endY) + 1; i < *max(startY, endY); ++i) {
+            for (int i = min(startY, endY) + 1; i < max(startY, endY); ++i) {
                 if (board.get(startX, i) != "") return false;  // Blocked
             }
             return true;
         } else if (startY == endY) {  // Horizontal move
-            for (int i = *min(startX, endX) + 1; i < *max(startX, endX); ++i) {
+            for (int i = min(startX, endX) + 1; i < max(startX, endX); ++i) {
                 if (board.get(i, startY) != "") return false;  // Blocked
             }
             return true;
@@ -193,7 +194,7 @@ void playerMove(Board& board, string player) {
     while (true) {
         print(player);
         print("'s turn. Enter your move (e.g., e2 e4): ");
-        getline(&cin, &move);
+        getline(cin, move);
 
         // Ensure move has the correct length
         if (move.size() != 5 || move[2] != ' ') {
@@ -224,12 +225,12 @@ void playerMove(Board& board, string player) {
 
 int main() {
     Board board {};
-    initializeBoard(&board);
+    initializeBoard(board);
     board.show();
 
     while (true) {
-        playerMove(&board, "White");
-        playerMove(&board, "Black");
+        playerMove(board, "White");
+        playerMove(board, "Black");
     }
 
     return 0;
