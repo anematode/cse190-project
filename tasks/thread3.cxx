@@ -52,6 +52,6 @@ int main() safe {
 
   // The consuming into_iterator produced by `rel threads` lets us relocate
   // elements out of the vector for the consuming thread::join call.
-  for(thread ^t : ^ threads)
-    t^->join();
+  for(thread t : rel threads)
+    t rel.join();
 }
