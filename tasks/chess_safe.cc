@@ -1,6 +1,7 @@
 #include "../vendor/io.h"
 #include <array>
 #include <string>
+#include <vector>
 
 #feature on safety
 
@@ -25,8 +26,13 @@ struct Board {
     }
 
     // Helper function to set a piece at a specific position
-    void set(int x, int y, string const& piece) {
-        squares[(unsigned int)y * BOARD_SIZE + (unsigned int)x] = piece;
+    void set(int x, int y, string piece) {
+        println(x);
+        println(y);
+        println(piece);
+        squares[(unsigned int)y * BOARD_SIZE + (unsigned int)x] = rel piece;
+        println(x);
+        println(y);
     }
 
     // Function to print the board
@@ -46,21 +52,27 @@ struct Board {
 };
 
 // Function to initialize the chess board
-void initializeBoard(Board& board) {
+void initializeBoard(Board^ board) safe {
+    Board& b = &(*board);
+    
     // Place pawns
+#if 1
     for (int i = 0; i < (int)BOARD_SIZE; ++i) {
-        board.set(i, 1, "P");  // White pawns
-        board.set(i, 6, "p");  // Black pawns
+        b.set(i, 1, "P");  // White pawns
+        b.set(i, 6, "p");  // Black pawns
     }
+#endif
 
     // Place other pieces
-    string whitePieces[] = {"R", "N", "B", "Q", "K", "B", "N", "R"};
-    string blackPieces[] = {"r", "n", "b", "q", "k", "b", "n", "r"};
+    vector<string> whitePieces = {"R", "N", "B", "Q", "K", "B", "N", "R"};
+    vector<string> blackPieces = {"r", "n", "b", "q", "k", "b", "n", "r"};
 
+#if 0
     for (int i = 0; i < (int)BOARD_SIZE; ++i) {
-        board.set(i, 0, whitePieces[(unsigned int)i]);
-        board.set(i, 7, blackPieces[(unsigned int)i]);
+        b.set(i, 0, whitePieces[(unsigned int)i]);
+        b.set(i, 7, blackPieces[(unsigned int)i]);
     }
+#endif
 }
 
 // Abstract class for ValidMoveChecker
@@ -212,7 +224,7 @@ void playerMove(Board& board, string player) {
 
         ValidMoveChecker* checker = ValidMoveCheckerFactory::createChecker(piece[0]);
         if (checker && checker->isValidMove(startX, startY, endX, endY, board, player)) {
-            board.set(endX, endY, piece);
+            board.set(endX, endY, rel piece);
             board.set(startX, startY, "");
             board.show();
             break;
@@ -224,7 +236,7 @@ void playerMove(Board& board, string player) {
 
 int main() {
     Board board {};
-    initializeBoard(&board);
+    initializeBoard(^board);
     board.show();
 
     while (true) {
