@@ -1,3 +1,11 @@
+// This task is to test integration into existing codebases.
+//
+// Here the task is to turn safety on for only part of the
+// file to simulate adding to a small part of a larger project.
+// 
+// Fot this task you will need to make modifications to the file
+// so that the program is able to compile with safety features on. 
+
 #include "../vendor/io.h"
 #include <array>
 #include <string>
@@ -44,6 +52,8 @@ struct Board {
     }
 };
 
+// Here we add a line to the original implementation
+// to turn safety features on
 #feature on safety
 
 // Function to initialize the chess board

@@ -10,8 +10,8 @@ void printBoard(const vector<vector<char>>^ board) safe {
     for (unsigned int i = 0; i < 3; ++i) {
         const vector<char>^ row = board[i];
         print("| ");
-    for (unsigned int j = 0; j < 3; ++j) {
-        char cell = row[j];
+        for (unsigned int j = 0; j < 3; ++j) {
+            char cell = row[j];
             print(cell);
             print(" | ");
         }

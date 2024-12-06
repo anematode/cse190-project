@@ -1,3 +1,11 @@
+// This task is to get the idea of what it takes
+// to make an entire program to be safe using this
+// smaller program as an example.
+//
+// For this task you will need to mark every
+// function to be safe and use borrows instead
+// of references to ensure memory safety.
+
 #feature on safety
 #include "../vendor/std2.h"
 #include "../vendor/io.h"
