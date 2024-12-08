@@ -38,4 +38,13 @@ Object^ object;
 // the new syntax is to put '&' before the object.
 Object& ref = &object;
 
+// The rel expression names an object or subobject and relocates that into a new vlaue.
+// the old value becomes uninitialized.
+std2::string_view p;
+// p is moved into q. now p is uninitialized again.
+auto q = rel p;
+
+
+
+
 
