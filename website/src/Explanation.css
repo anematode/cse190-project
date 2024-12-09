@@ -1,0 +1,14 @@
+
+.elements {
+    display: flex;
+    flex-direction: column;
+}
+
+.element {
+    display: flex;
+    flex-direction: row;
+}
+
+.element * {
+    margin-right: 10px;
+}
