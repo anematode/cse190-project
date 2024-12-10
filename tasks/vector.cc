@@ -16,20 +16,6 @@ void reverse_vector(std::vector<int>& vec) {
 #feature on safety
 #include "../vendor/std2.h"
 
-// Starter code
-#if 0
-void reverse_vector(std2::vector<int>^ vec) safe {
-	int i = 0, j = (int)vec.size() - 1;
-	while (i < j) {
-		int tmp = vec[i];
-		vec[i] = vec[j];
-		vec[j] = tmp;
-
-		++i;
-		--j;
-	}
-}
-#else
 // Solution
 void reverse_vector(std2::vector<int>^ vec) safe {
 	int i = 0, j = (int)vec.size() - 1;
@@ -42,7 +28,6 @@ void reverse_vector(std2::vector<int>^ vec) safe {
 		--j;
 	}
 }
-#endif
 
 void check(const std2::vector<int>^ vec, std2::vector<int> truth) safe {
 	std2::assert(vec.size() == truth.size(), "Sizes are not equal");

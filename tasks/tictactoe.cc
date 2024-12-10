@@ -1,14 +1,17 @@
-#include <vector>
+#feature on safety
+#include "../vendor/std2.h"
 #include "../vendor/io.h"
 
-using namespace std;
+using namespace std2;
 
 // Function to print the board
-void printBoard(const vector<vector<char>>& board) {
+void printBoard(const vector<vector<char>>^ board) safe {
     println("-------------");
-    for (const auto& row : board) {
+    for (unsigned int i = 0; i < 3; ++i) {
+        const vector<char>^ row = board[i];
         print("| ");
-        for (char cell : row) {
+        for (unsigned int j = 0; j < 3; ++j) {
+            char cell = row[j];
             print(cell);
             print(" | ");
         }
@@ -16,10 +19,35 @@ void printBoard(const vector<vector<char>>& board) {
     }
 }
 
+// Function to handle a player's move
+void playerMove(vector<vector<char>>^ board, char player) safe {
+    unsigned int row = 1, col = 1;
+    while (true) {
+        print("Player ");
+        print(player);
+        print(", enter your move (row and column): ");
+
+        unsafe {
+            input(&row);
+            input(&col);
+        }
+
+        if (row >= 1 && row <= 3 && col >= 1 && col <= 3 && board[row - 1][col - 1] == ' ') {
+        //  board[row - 1][col - 1] = player;
+            vector<char>^ column = ^board[row - 1];
+            char^         cell   = ^column[col - 1];
+                         *cell   = player;
+            break;
+        }
+
+        println("Invalid move. Try again.");
+    }
+}
+
 // Function to check if a player has won
-bool checkWin(const vector<vector<char>>& board, char player) {
+bool checkWin(const vector<vector<char>>^ board, char player) safe {
     // Check rows, columns, and diagonals
-    for (int i = 0; i < 3; i++) {
+    for (unsigned int i = 0; i < 3; i++) {
         if ((board[i][0] == player && board[i][1] == player && board[i][2] == player) || // row
             (board[0][i] == player && board[1][i] == player && board[2][i] == player))   // column
             return true;
@@ -29,8 +57,8 @@ bool checkWin(const vector<vector<char>>& board, char player) {
 }
 
 // Function to check if the game is a draw
-bool checkDraw(const vector<vector<char>>& board) {
-    for (const auto& row : board) {
+bool checkDraw(const vector<vector<char>>^ board) safe {
+    for (const vector<char>^ row : board) {
         for (char cell : row) {
             if (cell == ' ') return false;
         }
@@ -38,28 +66,14 @@ bool checkDraw(const vector<vector<char>>& board) {
     return true;
 }
 
-// Function to handle a player's move
-void playerMove(vector<vector<char>>& board, char player) {
-    int row, col;
-    while (true) {
-        print("Player ");
-        print(player);
-        print(", enter your move (row and column): ");
-        input(row);
-        input(col);
-        if (row >= 1 && row <= 3 && col >= 1 && col <= 3 && board[row - 1][col - 1] == ' ') {
-            board[row - 1][col - 1] = player;
-            break;
-        } else {
-            println("Invalid move. Try again.");
-        }
-    }
-}
-
 // Main function
-int main() {
+int main() safe {
     // Initialize a 3x3 board with empty spaces
-    vector<vector<char>> board(3, vector<char>(3, ' '));
+    vector<vector<char>> board {
+        {' ', ' ', ' '},
+        {' ', ' ', ' '},
+        {' ', ' ', ' '}
+    };
     char currentPlayer = 'X';
     bool gameWon = false;
 
@@ -69,7 +83,7 @@ int main() {
         printBoard(board);
 
         // Take the player's move
-        playerMove(board, currentPlayer);
+        playerMove(^board, currentPlayer);
 
         // Check if the current player has won
         if (checkWin(board, currentPlayer)) {
@@ -93,5 +107,3 @@ int main() {
 
     return 0;
 }
-
-
